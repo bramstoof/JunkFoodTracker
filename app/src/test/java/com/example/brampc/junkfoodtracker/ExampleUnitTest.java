@@ -1,4 +1,4 @@
-package com.example.bram.junkfoodtracker;
+package com.example.brampc.junkfoodtracker;
 
 import org.junit.Test;
 

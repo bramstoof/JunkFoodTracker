@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:499872301922:android:2f59f79949cc024f",
+        "mobilesdk_app_id": "1:499872301922:android:646dcac4db6e76ae",
         "android_client_info": {
-          "package_name": "com.example.bram.junkfoodtracker"
+          "package_name": "com.example.brampc.junkfoodtracker"
         }
       },
       "oauth_client": [
         {
-          "client_id": "499872301922-1kte9pqi9i50ev9i05dcphshhoacnmc6.apps.googleusercontent.com",
+          "client_id": "499872301922-ijma4ia08s0ass7jjf8ehkl8vkdu2cmh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.bram.junkfoodtracker",
-            "certificate_hash": "ba8152b4684317591a6473c45964f479d5e3c998"
+            "package_name": "com.example.brampc.junkfoodtracker",
+            "certificate_hash": "9544a272304535a454a54ae61531081155a4d8c0"
           }
         },
         {
