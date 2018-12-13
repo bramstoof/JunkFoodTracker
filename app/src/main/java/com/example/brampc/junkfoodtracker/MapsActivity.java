@@ -15,21 +15,40 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionApi;
+import com.google.android.gms.location.places.PlaceFilter;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.PlaceReport;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.PlacesOptions;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, PlaceDetectionApi{
 
     private GoogleMap mMap;
     private final String TAG = "MAINMAP";
@@ -39,17 +58,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String COUSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15;
-    private static final String PLACES_KEY = "AIzaSyBdQV6DkEMftdRLGIj45JazMEXEPXkcPcY";
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40,-68), new LatLng(71,136));
+    private PendingResult<PlaceLikelihoodBuffer> pendingResult;
+    private int PROXIMITY_RADIUS = 10000;
+    private Location currentLocation;
+
 
 
 
 
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
-    private int test;
+    private GoogleApiClient mGoogleApiClient;
+    private PlaceAutocomplete placeAutocomplete;
+    private int place = Place.TYPE_RESTAURANT;
+
 
     private Button zoeken;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +83,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         zoeken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getgoeLocation();
+                getLocationInfo();
+                Toast.makeText(MapsActivity.this, "Showing Nearby Hospitals", Toast.LENGTH_SHORT).show();
             }
+
         });
         getLocationPromission();
     }
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
 
     public void getLocationPromission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
@@ -81,6 +113,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
+
+
+
+        //mGoogleApiClient.
+        //callPlaceDetectionApi();
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
@@ -99,20 +143,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     mLocationPermissionGranted = true;
                     initMap();
+
                 }
             }
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -126,11 +162,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
         }
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void getLocationDevice(){
@@ -143,7 +174,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){
                         Log.d(TAG,"onComplete: fond Location!");
-                        Location currentLocation = (Location) task.getResult();
+                        currentLocation = (Location) task.getResult();
                         moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),DEFAULT_ZOOM,"my location");
 
 
@@ -177,6 +208,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<Address> list = null;
         try{
 
+
             list = geocoder.getFromLocationName(serchString, 1);
 
         }catch (IOException e){
@@ -195,8 +227,128 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void getLocationInfo(){
+        AutocompleteFilter filters = new AutocompleteFilter.Builder().build();
+        filters.getTypeFilter();
+        Collection<String> locations= new Collection<String>() {
+            @Override
+            public int size() {
+                return 0;
+            }
 
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
 
+            @Override
+            public boolean contains(Object o) {
+                return false;
+            }
+
+            @Override
+            public Iterator<String> iterator() {
+                return null;
+            }
+
+            @Override
+            public Object[] toArray() {
+                return new Object[0];
+            }
+
+            @Override
+            public <T> T[] toArray(T[] ts) {
+                return null;
+            }
+
+            @Override
+            public boolean add(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean remove(Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean containsAll(Collection<?> collection) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(Collection<? extends String> collection) {
+                return false;
+            }
+
+            @Override
+            public boolean removeAll(Collection<?> collection) {
+                return false;
+            }
+
+            @Override
+            public boolean retainAll(Collection<?> collection) {
+                return false;
+            }
+
+            @Override
+            public void clear() {
+
+            }
+        };
+        PlaceFilter filter = new PlaceFilter(true,locations);
+        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(mGoogleApiClient, filter);
+        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
+            @Override
+            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
+                Log.d(TAG,likelyPlaces.toString());
+                ArrayList<places> locations = new ArrayList<>();
+                mMap.clear();
+                int i = 0;
+                for (PlaceLikelihood placeLike:likelyPlaces) {
+                    Place place = placeLike.getPlace();
+                    places thePlace = new places(place.getName().toString(), place.getAddress().toString(),place.getLatLng(),
+                            place.getPlaceTypes(),place.getRating(),place.getWebsiteUri());
+                    locations.add(thePlace);
+                    MarkerOptions options = new MarkerOptions().position(place.getLatLng()).title(place.getName().toString());
+                    mMap.addMarker(options);
+                    Log.d(TAG,++i + ":"+place.getName().toString() +":"+  place.getAddress().toString()
+                                    +":"+ place.getLatLng().toString()
+                            );
+
+                }
+                Log.d(TAG,"test test test");
+            }
+        });
+    }
+
+    public void GetPlacesLocale(){
+        PlacesOptions options = new PlacesOptions.Builder().build();
+        PlaceFilter placeFilter = new PlaceFilter();
+        //PlaceDetectionClient mPlaceDetectionClient = new PlaceDetectionClient();
+        //Task<PlaceLikelihoodBufferResponse> placeResult ;
+        //placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
+           //// @Override
+           // public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
+          //      PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
+          //      for (PlaceLikelihood placeLikelihood : likelyPlaces) {
+          //          Log.i(TAG, String.format("Place '%s' has likelihood: %g",
+          //                  placeLikelihood.getPlace().getName(),
+          //                  placeLikelihood.getLikelihood()));
+          //      }
+          //      likelyPlaces.release();
+      //      }
+       // });
+    }
+    @Override
+    public PendingResult<PlaceLikelihoodBuffer> getCurrentPlace(GoogleApiClient googleApiClient, PlaceFilter placeFilter) {
+       return null;
+    }
+
+    @Override
+    public PendingResult<Status> reportDeviceAtPlace(GoogleApiClient googleApiClient, PlaceReport placeReport) {
+        return null;
+    }
 
 
 }
