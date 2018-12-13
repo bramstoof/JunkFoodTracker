@@ -58,7 +58,7 @@ import java.util.List;
 
 import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, PlaceDetectionApi {
 
     private GoogleMap mMap;
     private final String TAG = "MAINMAP";
@@ -157,7 +157,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
-
 
 
         //mGoogleApiClient.
@@ -262,7 +261,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
 
     public void getLocationInfo(){
         AutocompleteFilter filters = new AutocompleteFilter.Builder().build();
