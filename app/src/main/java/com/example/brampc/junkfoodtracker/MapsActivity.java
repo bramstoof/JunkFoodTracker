@@ -23,6 +23,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -33,12 +39,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionApi;
+import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceFilter;
 import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.PlaceReport;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.PlacesOptions;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -94,6 +101,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 getLocationInfo();
+                //getPlaseLocation();
+                //searchPlacesLocaltArea();
                 Toast.makeText(MapsActivity.this, "Showing Nearby Hospitals", Toast.LENGTH_SHORT).show();
                 showNotification("NotificatieTitel", "Dit is de notificatie Text");
             }
@@ -357,24 +366,54 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    public void GetPlacesLocale(){
-        PlacesOptions options = new PlacesOptions.Builder().build();
-        PlaceFilter placeFilter = new PlaceFilter();
-        //PlaceDetectionClient mPlaceDetectionClient = new PlaceDetectionClient();
-        //Task<PlaceLikelihoodBufferResponse> placeResult ;
-        //placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-           //// @Override
-           // public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-          //      PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-          //      for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-          //          Log.i(TAG, String.format("Place '%s' has likelihood: %g",
-          //                  placeLikelihood.getPlace().getName(),
-          //                  placeLikelihood.getLikelihood()));
-          //      }
-          //      likelyPlaces.release();
-      //      }
-       // });
+    public void getPlaseLocation(){
+        PlaceDetectionClient mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
+        PlaceFilter filter = new PlaceFilter(true,null);
+        Task<PlaceLikelihoodBufferResponse> placeResult = mPlaceDetectionClient.getCurrentPlace(filter);
+
+        placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
+                PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
+                mMap.clear();
+                int i = 0;
+                ArrayList<places> locations = new ArrayList<>();
+                for (PlaceLikelihood placeLike:likelyPlaces) {
+                    Place place = placeLike.getPlace();
+                    places thePlace = new places(place.getName().toString(), place.getAddress().toString(),place.getLatLng(),
+                            place.getPlaceTypes(),place.getRating(),place.getWebsiteUri());
+                    locations.add(thePlace);
+                    MarkerOptions options = new MarkerOptions().position(place.getLatLng()).title(place.getName().toString());
+                    mMap.addMarker(options);
+                    Log.d(TAG,++i + ":"+place.getName().toString() +":"+  place.getAddress().toString()
+                            +":"+ place.getLatLng().toString()
+                    );
+
+
+            }
+            likelyPlaces.release();
+        }});
     }
+
+
+    public void searchPlacesLocaltArea(){
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=51.990276,5.103033&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyBdQV6DkEMftdRLGIj45JazMEXEPXkcPcY";
+        //String url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/output?parameters";
+        final RequestQueue queue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG,response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error: ", error.toString());
+            }
+        });
+        queue.add(stringRequest);
+    }
+
     @Override
     public PendingResult<PlaceLikelihoodBuffer> getCurrentPlace(GoogleApiClient googleApiClient, PlaceFilter placeFilter) {
        return null;
