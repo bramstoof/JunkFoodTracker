@@ -22,4 +22,52 @@ public class places {
         Rating = rating;
         this.url = url;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStreet() {
+        return Street;
+    }
+
+    public void setStreet(String street) {
+        Street = street;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
+    public List<Integer> getPlaceType() {
+        return placeType;
+    }
+
+    public void setPlaceType(List<Integer> placeType) {
+        this.placeType = placeType;
+    }
+
+    public float getRating() {
+        return Rating;
+    }
+
+    public void setRating(float rating) {
+        Rating = rating;
+    }
+
+    public Uri getUrl() {
+        return url;
+    }
+
+    public void setUrl(Uri url) {
+        this.url = url;
+    }
 }

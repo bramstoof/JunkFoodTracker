@@ -21,15 +21,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -47,6 +46,7 @@ import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.PlaceReport;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -55,13 +55,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
@@ -75,13 +85,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String COUSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40,-68), new LatLng(71,136));
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -68), new LatLng(71, 136));
     private PendingResult<PlaceLikelihoodBuffer> pendingResult;
     private int PROXIMITY_RADIUS = 10000;
+    private static final int RC_SIGN_IN = 123;
     private Location currentLocation;
+    private int PLACE_PICKER_REQUEST = 1;
+    DataBase dataBase;
 
-
-
+    private TextView other_user;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     private boolean mLocationPermissionGranted = false;
@@ -92,29 +105,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private Button zoeken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         zoeken = findViewById(R.id.zoek);
+
+        dataBase = new DataBase();
+
+        other_user = findViewById(R.id.other_user);
+
+
+        createSignInIntent();
+
+
+
         zoeken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getLocationInfo();
-                //getPlaseLocation();
-                //searchPlacesLocaltArea();
-                Toast.makeText(MapsActivity.this, "Showing Nearby Hospitals", Toast.LENGTH_SHORT).show();
-                showNotification("NotificatieTitel", "Dit is de notificatie Text");
+                //getLocationInfo();
+                Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
+                dataBase.readData();
+                //placePicker();
+                //showNotification("NotificatieTitel", "Dit is de notificatie Text");
+
+                // createSignInIntent();
+
+                //signOut();
             }
 
         });
         getLocationPromission();
     }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
+
+    private void intentDatabase(){
+        // Access a Cloud Firestore instance from your Activity
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    }
 
     public void getLocationPromission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
@@ -209,214 +243,177 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void getLocationDevice(){
+    private void signOut(){
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+    }
+    //De code voor een mooi inlogscherm, automatisch gegenereerd door google
+    private void createSignInIntent() {
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.PhoneBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build(),
+                new AuthUI.IdpConfig.EmailBuilder().build()
+        );
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setLogo(R.drawable.logo_jft)
+                        .build(), RC_SIGN_IN);
+    }
+
+
+    //de username ophalen van de ingelogde user
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+        }
+        if (resultCode == RESULT_OK) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            other_user.setText(user.getDisplayName());
+        } else {
+            createSignInIntent();
+        }
+    }
+
+    public void getLocationDevice() {
         Log.d(TAG, "getDeviceLocation: getting the curent location");
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         try {
+
             final Task location = mFusedLocationClient.getLastLocation();
             location.addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful()){
-                        Log.d(TAG,"onComplete: fond Location!");
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "onComplete: fond Location!");
                         currentLocation = (Location) task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),DEFAULT_ZOOM,"my location");
+                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "my location");
 
 
-                    }
-                    else {
-                        Log.d(TAG,"onComplete: location is null");
+                    } else {
+                        Log.d(TAG, "onComplete: location is null");
                         Toast.makeText(MapsActivity.this, "location nog found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             Log.e(TAG, "getDeviceLocation: securetyExeption:" +
                     e.getMessage());
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title){
+    private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the cammera ot" +
                 "");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-        if(title != "my location") {
+        if (title != "my location") {
             MarkerOptions options = new MarkerOptions().position(latLng).title(title);
             mMap.addMarker(options);
         }
     }
 
-    private void getgoeLocation(){
+    private void getgoeLocation() {
 
         String serchString = "Vianen";
         Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> list = null;
-        try{
+        try {
 
 
             list = geocoder.getFromLocationName(serchString, 1);
 
-        }catch (IOException e){
-            Log.e(TAG,e.getMessage());
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
         }
-        if (list.size() > 0){
+        if (list.size() > 0) {
             Address address = list.get(0);
-            Log.d(TAG,"geoLocate: found a location" + address.toString());
+            Log.d(TAG, "geoLocate: found a location" + address.toString());
 
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getAddressLine(0) + address.getThoroughfare());
-        }
-        else {
-            Log.d(TAG,"geoLocate: no location found");
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0) + address.getThoroughfare());
+        } else {
+            Log.d(TAG, "geoLocate: no location found");
         }
 
     }
 
-    public void getLocationInfo(){
-        AutocompleteFilter filters = new AutocompleteFilter.Builder().build();
-        filters.getTypeFilter();
-        Collection<String> locations= new Collection<String>() {
-            @Override
-            public int size() {
-                return 0;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @Override
-            public Iterator<String> iterator() {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] ts) {
-                return null;
-            }
-
-            @Override
-            public boolean add(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends String> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> collection) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> collection) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-        };
-        PlaceFilter filter = new PlaceFilter(true,locations);
+    public void getLocationInfo() {
+        ArrayList<String> filters = new ArrayList<>();
+        PlaceFilter filter = new PlaceFilter(true, filters);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(mGoogleApiClient, filter);
         result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
             @Override
             public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                Log.d(TAG,likelyPlaces.toString());
+                Log.d(TAG, likelyPlaces.toString());
                 ArrayList<places> locations = new ArrayList<>();
                 mMap.clear();
                 int i = 0;
-                for (PlaceLikelihood placeLike:likelyPlaces) {
+                for (PlaceLikelihood placeLike : likelyPlaces) {
                     Place place = placeLike.getPlace();
-                    places thePlace = new places(place.getName().toString(), place.getAddress().toString(),place.getLatLng(),
-                            place.getPlaceTypes(),place.getRating(),place.getWebsiteUri());
-                    locations.add(thePlace);
-                    MarkerOptions options = new MarkerOptions().position(place.getLatLng()).title(place.getName().toString());
-                    mMap.addMarker(options);
-                    Log.d(TAG,++i + ":"+place.getName().toString() +":"+  place.getAddress().toString()
-                                    +":"+ place.getLatLng().toString()
-                            );
+                    places thePlace = new places(place.getName().toString(), place.getAddress().toString(), place.getLatLng(),
+                            place.getPlaceTypes(), place.getRating(), place.getWebsiteUri());
+
+                    if (isRestaurant(thePlace)) {
+                        locations.add(thePlace);
+                        MarkerOptions options = new MarkerOptions().position(place.getLatLng()).title(place.getName().toString());
+                        mMap.addMarker(options);
+                        Log.d(TAG, ++i + ":" + place.getName().toString() + ":" + place.getAddress().toString()
+                                + ":" + place.getLatLng().toString()
+                        );
+                    }
 
                 }
-                Log.d(TAG,"test test test");
+                Log.d(TAG, "test test test");
             }
         });
     }
 
-    public void getPlaseLocation(){
-        PlaceDetectionClient mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
-        PlaceFilter filter = new PlaceFilter(true,null);
-        Task<PlaceLikelihoodBufferResponse> placeResult = mPlaceDetectionClient.getCurrentPlace(filter);
-
-        placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-                mMap.clear();
-                int i = 0;
-                ArrayList<places> locations = new ArrayList<>();
-                for (PlaceLikelihood placeLike:likelyPlaces) {
-                    Place place = placeLike.getPlace();
-                    places thePlace = new places(place.getName().toString(), place.getAddress().toString(),place.getLatLng(),
-                            place.getPlaceTypes(),place.getRating(),place.getWebsiteUri());
-                    locations.add(thePlace);
-                    MarkerOptions options = new MarkerOptions().position(place.getLatLng()).title(place.getName().toString());
-                    mMap.addMarker(options);
-                    Log.d(TAG,++i + ":"+place.getName().toString() +":"+  place.getAddress().toString()
-                            +":"+ place.getLatLng().toString()
-                    );
-
-
+    private boolean isRestaurant(places place) {
+        List<Integer> types = place.getPlaceType();
+        for (int i : types) {
+            if (i == 82) {//79 is restaurant
+                return true;
             }
-            likelyPlaces.release();
-        }});
+        }
+        return false;
     }
 
-
-    public void searchPlacesLocaltArea(){
-        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=51.990276,5.103033&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyBdQV6DkEMftdRLGIj45JazMEXEPXkcPcY";
-        //String url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/output?parameters";
-        final RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG,response);
+    private boolean isRestaurant(Place place) {
+        List<Integer> types = place.getPlaceTypes();
+        for (int i : types) {
+            if (i == 79) {//79 is restaurant
+                return true;
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Error: ", error.toString());
-            }
-        });
-        queue.add(stringRequest);
+        }
+        return false;
     }
 
     @Override
     public PendingResult<PlaceLikelihoodBuffer> getCurrentPlace(GoogleApiClient googleApiClient, PlaceFilter placeFilter) {
-       return null;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return null;
+        }
+        return null;
     }
 
     @Override
