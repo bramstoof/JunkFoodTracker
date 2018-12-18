@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -126,7 +127,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
                 //dataBase.readData();
                 VolleyRequest volleyRequest = new VolleyRequest();
-                volleyRequest.getPlaces(getBaseContext(),currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
+                //volleyRequest.getPlaces(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
+                volleyRequest.getPlacesLocalTest(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
+
                 //showNotification("NotificatieTitel", "Dit is de notificatie Text");
 
                 // createSignInIntent();

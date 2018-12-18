@@ -1,6 +1,8 @@
 package com.example.brampc.junkfoodtracker;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -18,15 +20,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VolleyRequest {
+public class VolleyRequest implements PlacesAdapter.onItemClickListener{
 
     private final String TAG = "VOLLEY";
     private static final String SPECIAL_KEY = "AIzaSyA2uDGgfyhp_dSzLg4d2vf8jfjBODps0Gg";
     private String result;
+    private RecyclerView recyclerView;
+    Context context;
 
-    public void getPlaces(Context context, final double lat, double lng, int radius, String type, String keyword)
+    public void getPlaces(final Context context, final RecyclerView recyclerView, final double lat, double lng, int radius, String type, String keyword)
     {
-
+        this.recyclerView = recyclerView;
+        this.context = context;
         String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
                 "?location="+lat +"," + lng +
                 "&radius="+ radius +
@@ -61,12 +66,20 @@ public class VolleyRequest {
                             LatLng location = new LatLng(lat,lng);
                             Places place = new Places(name,placeID,icon,street,location,rating);
                             places.add(place);
+                            Log.d(TAG, "1");
                         }
                         else {
+                            Log.d(TAG, "2");
+                            PlacesAdapter adapter = new PlacesAdapter(places,context);
+                            recyclerView.setAdapter(adapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
                             break;
                         }
                     }
+
+
                 } catch (JSONException e) {
+                    Log.d(TAG, "3");
                     e.printStackTrace();
                 }
 
@@ -80,7 +93,31 @@ public class VolleyRequest {
         queue.add(stringRequest);
     }
 
+    public void getPlacesLocalTest(final Context context, final RecyclerView recyclerView, final double lat, double lng, int radius, String type, String keyword)
+    {
+
+        ArrayList<Places> places = new ArrayList<>();
+        Places p = new Places("wsdfghbjk","","","straat 1",new LatLng(1,1),4);
+        Places p2 = new Places("fdycgvuhoi","","","straat 2",new LatLng(1,1),2);
+        Places p3 = new Places("tfyughvjbk","","","straat 3",new LatLng(1,1),3);
+
+        places.add(p);
+        places.add(p2);
+        places.add(p3);
+        places.add(p);
+        places.add(p2);
+        places.add(p3);
+        places.add(p);
+        places.add(p2);
+        places.add(p3);
+        PlacesAdapter adapter = new PlacesAdapter(places,context);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+    }
 
 
+    @Override
+    public void onItemClick(int position) {
 
+    }
 }
