@@ -116,8 +116,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         other_user = findViewById(R.id.other_user);
 
-
-        //createSignInIntent();
+        createSignInIntent();
 
 
 
@@ -255,10 +254,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //De code voor een mooi inlogscherm, automatisch gegenereerd door google
     private void createSignInIntent() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.PhoneBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.AnonymousBuilder().build(),
-                new AuthUI.IdpConfig.EmailBuilder().build()
+                new AuthUI.IdpConfig.AnonymousBuilder().build()
         );
 
         startActivityForResult(
@@ -276,12 +273,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
+            System.out.println("HIJ KOMT IN RC SIGN IN");
             IdpResponse response = IdpResponse.fromResultIntent(data);
         }
         if (resultCode == RESULT_OK) {
+            System.out.println("HIJ KOMT IN RESULT OK");
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             other_user.setText(user.getDisplayName());
         } else {
+            System.out.println("HIJ KOMT IN DE ELSE");
             createSignInIntent();
         }
     }
