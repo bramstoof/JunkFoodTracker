@@ -6,21 +6,21 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class places {
+public class Places {
     private String name;
+    private String placeID;
+    private String icon;
     private String Street;
     private LatLng location;
-    private List<Integer> placeType;
     private float Rating;
-    private Uri url;
 
-    public places(String name, String street, LatLng location, List<Integer> placeType, float rating, Uri url) {
+    public Places(String name, String placeID, String icon, String street, LatLng location, float rating) {
         this.name = name;
+        this.placeID = placeID;
+        this.icon = icon;
         Street = street;
         this.location = location;
-        this.placeType = placeType;
         Rating = rating;
-        this.url = url;
     }
 
     public String getName() {
@@ -47,14 +47,6 @@ public class places {
         this.location = location;
     }
 
-    public List<Integer> getPlaceType() {
-        return placeType;
-    }
-
-    public void setPlaceType(List<Integer> placeType) {
-        this.placeType = placeType;
-    }
-
     public float getRating() {
         return Rating;
     }
@@ -63,11 +55,4 @@ public class places {
         Rating = rating;
     }
 
-    public Uri getUrl() {
-        return url;
-    }
-
-    public void setUrl(Uri url) {
-        this.url = url;
-    }
 }

@@ -117,17 +117,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         other_user = findViewById(R.id.other_user);
 
 
-        createSignInIntent();
+        //createSignInIntent();
 
 
 
         zoeken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //getLocationInfo();
-                Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
-                dataBase.readData();
-                //placePicker();
+                //Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
+                //dataBase.readData();
+                VolleyRequest volleyRequest = new VolleyRequest();
+                volleyRequest.getPlaces(getBaseContext(),currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
                 //showNotification("NotificatieTitel", "Dit is de notificatie Text");
 
                 // createSignInIntent();
@@ -321,84 +321,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions options = new MarkerOptions().position(latLng).title(title);
             mMap.addMarker(options);
         }
-    }
-
-    private void getgoeLocation() {
-
-        String serchString = "Vianen";
-        Geocoder geocoder = new Geocoder(MapsActivity.this);
-        List<Address> list = null;
-        try {
-
-
-            list = geocoder.getFromLocationName(serchString, 1);
-
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        if (list.size() > 0) {
-            Address address = list.get(0);
-            Log.d(TAG, "geoLocate: found a location" + address.toString());
-
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0) + address.getThoroughfare());
-        } else {
-            Log.d(TAG, "geoLocate: no location found");
-        }
-
-    }
-
-    public void getLocationInfo() {
-        ArrayList<String> filters = new ArrayList<>();
-        PlaceFilter filter = new PlaceFilter(true, filters);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        PendingResult<PlaceLikelihoodBuffer> result = Places.PlaceDetectionApi.getCurrentPlace(mGoogleApiClient, filter);
-        result.setResultCallback(new ResultCallback<PlaceLikelihoodBuffer>() {
-            @Override
-            public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
-                Log.d(TAG, likelyPlaces.toString());
-                ArrayList<places> locations = new ArrayList<>();
-                mMap.clear();
-                int i = 0;
-                for (PlaceLikelihood placeLike : likelyPlaces) {
-                    Place place = placeLike.getPlace();
-                    places thePlace = new places(place.getName().toString(), place.getAddress().toString(), place.getLatLng(),
-                            place.getPlaceTypes(), place.getRating(), place.getWebsiteUri());
-
-                    if (isRestaurant(thePlace)) {
-                        locations.add(thePlace);
-                        MarkerOptions options = new MarkerOptions().position(place.getLatLng()).title(place.getName().toString());
-                        mMap.addMarker(options);
-                        Log.d(TAG, ++i + ":" + place.getName().toString() + ":" + place.getAddress().toString()
-                                + ":" + place.getLatLng().toString()
-                        );
-                    }
-
-                }
-                Log.d(TAG, "test test test");
-            }
-        });
-    }
-
-    private boolean isRestaurant(places place) {
-        List<Integer> types = place.getPlaceType();
-        for (int i : types) {
-            if (i == 82) {//79 is restaurant
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isRestaurant(Place place) {
-        List<Integer> types = place.getPlaceTypes();
-        for (int i : types) {
-            if (i == 79) {//79 is restaurant
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
