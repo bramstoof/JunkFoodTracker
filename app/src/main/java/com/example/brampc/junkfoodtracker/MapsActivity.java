@@ -8,8 +8,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,51 +26,30 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionApi;
-import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceFilter;
-import com.google.android.gms.location.places.PlaceLikelihood;
 import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.PlaceReport;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
@@ -86,59 +63,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String COUSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -68), new LatLng(71, 136));
-    private PendingResult<PlaceLikelihoodBuffer> pendingResult;
-    private int PROXIMITY_RADIUS = 10000;
     private static final int RC_SIGN_IN = 123;
     private Location currentLocation;
-    private int PLACE_PICKER_REQUEST = 1;
     DataBase dataBase;
 
     private TextView other_user;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-
 
     private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
     private GoogleApiClient mGoogleApiClient;
-    private PlaceAutocomplete placeAutocomplete;
-    private int place = Place.TYPE_RESTAURANT;
-
 
     private Button zoeken;
+    private Button filter;
+    private Button settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         zoeken = findViewById(R.id.zoek);
-
+        filter = findViewById(R.id.main_filter);
+        settings = findViewById(R.id.main_settings);
         dataBase = new DataBase();
-
         other_user = findViewById(R.id.other_user);
-
         createSignInIntent();
-
-
-
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentFilter fragmentFilter = new FragmentFilter();
+                fragmentFilter.show(getSupportFragmentManager(),"filter");
+            }
+        });
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentSettings fragmentSettings = new FragmentSettings();
+                fragmentSettings.show(getSupportFragmentManager(),"settings");
+            }
+        });
         zoeken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
                 //dataBase.readData();
+                SettingsInfo info = new SettingsInfo(getBaseContext());
                 VolleyRequest volleyRequest = new VolleyRequest();
-                //volleyRequest.getPlaces(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
-                volleyRequest.getPlacesLocalTest(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
+                //volleyRequest.getPlaces(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap,currentLocation.getLatitude(),currentLocation.getLongitude(),info.loadRadius(),"meal_takeaway", info.loadKeyword());
+                volleyRequest.getPlacesLocalTest(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap,currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
 
-                //showNotification("NotificatieTitel", "Dit is de notificatie Text");
 
-                // createSignInIntent();
-
-                //signOut();
             }
 
         });
         getLocationPromission();
+
+
     }
 
     @Override
@@ -245,17 +224,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void signOut(){
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
-    }
     //De code voor een mooi inlogscherm, automatisch gegenereerd door google
     private void createSignInIntent() {
+
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.AnonymousBuilder().build()
@@ -265,10 +236,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setAlwaysShowSignInMethodScreen(false)
                         .setLogo(R.drawable.logo_jft)
                         .build(), RC_SIGN_IN);
     }
-
 
     //de username ophalen van de ingelogde user
     @Override
@@ -282,7 +253,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (resultCode == RESULT_OK) {
             System.out.println("HIJ KOMT IN RESULT OK");
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            other_user.setText(user.getDisplayName());
+            SettingsInfo info = new SettingsInfo(getBaseContext());
+            info.saveNaam(user.getDisplayName());
         } else {
             System.out.println("HIJ KOMT IN DE ELSE");
             createSignInIntent();

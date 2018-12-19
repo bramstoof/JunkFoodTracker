@@ -11,14 +11,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class VolleyRequest implements PlacesAdapter.onItemClickListener{
 
@@ -27,9 +29,12 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
     private String result;
     private RecyclerView recyclerView;
     Context context;
+    ArrayList<Places> places = new ArrayList<>();
+    GoogleMap mMap;
 
-    public void getPlaces(final Context context, final RecyclerView recyclerView, final double lat, double lng, int radius, String type, String keyword)
+    public void getPlaces(final Context context, final RecyclerView recyclerView, final GoogleMap mMap, final double lat, double lng, int radius, String type, String keyword)
     {
+        this.mMap = mMap;
         this.recyclerView = recyclerView;
         this.context = context;
         String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
@@ -44,11 +49,10 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, response);
-                ArrayList<Places> places = new ArrayList<>();
                 try {
                     int id = 0;
                     JSONArray list = new JSONObject(response).getJSONArray("results");
-                    while(true){
+                    while(list.length() < id){
                         JSONObject object = list.getJSONObject(id++);
                         if(object != null){
                             String name = object.getString("name");
@@ -65,16 +69,16 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                             double lng = loc.getDouble("lng");
                             LatLng location = new LatLng(lat,lng);
                             Places place = new Places(name,placeID,icon,street,location,rating);
+                            MarkerOptions options = new MarkerOptions().position(location).title(name);
+                            mMap.addMarker(options);
                             places.add(place);
                             Log.d(TAG, "1");
                         }
-                        else {
-                            Log.d(TAG, "2");
-                            PlacesAdapter adapter = new PlacesAdapter(places,context);
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                            break;
-                        }
+                        Log.d(TAG, "2");
+                        PlacesAdapter adapter = new PlacesAdapter(places,context);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        adapter.setOnItemClickListener(VolleyRequest.this);
                     }
 
 
@@ -93,31 +97,36 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
         queue.add(stringRequest);
     }
 
-    public void getPlacesLocalTest(final Context context, final RecyclerView recyclerView, final double lat, double lng, int radius, String type, String keyword)
+    public void getPlacesLocalTest(final Context context, final RecyclerView recyclerView, final GoogleMap mMap,final double lat, double lng, int radius, String type, String keyword)
     {
 
-        ArrayList<Places> places = new ArrayList<>();
-        Places p = new Places("wsdfghbjk","","","straat 1",new LatLng(1,1),4);
-        Places p2 = new Places("fdycgvuhoi","","","straat 2",new LatLng(1,1),2);
-        Places p3 = new Places("tfyughvjbk","","","straat 3",new LatLng(1,1),3);
+        this.mMap = mMap;
+        Places p = new Places("Jumbo","","","straat 1",new LatLng(51.991387,5.094252),4);
+        places.add(p);
+        MarkerOptions options = new MarkerOptions().position(p.getLocation()).title(p.getName());
+        mMap.addMarker(options);
 
+        p = new Places("Aldi","","","straat 2",new LatLng(51.994254,5.102853),2);
         places.add(p);
-        places.add(p2);
-        places.add(p3);
+        options = new MarkerOptions().position(p.getLocation()).title(p.getName());
+        mMap.addMarker(options);
+
+        p = new Places("kleine Brug","","","straat 3",new LatLng(51.995324,5.096314),3);
         places.add(p);
-        places.add(p2);
-        places.add(p3);
-        places.add(p);
-        places.add(p2);
-        places.add(p3);
+        options = new MarkerOptions().position(p.getLocation()).title(p.getName());
+        mMap.addMarker(options);
+
+
         PlacesAdapter adapter = new PlacesAdapter(places,context);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        adapter.setOnItemClickListener(this);
     }
 
 
     @Override
     public void onItemClick(int position) {
-
+        Places place = places.get(position);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLocation(), 15));
     }
 }
