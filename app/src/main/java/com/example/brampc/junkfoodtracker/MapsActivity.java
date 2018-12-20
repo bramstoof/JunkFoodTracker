@@ -109,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 SettingsInfo info = new SettingsInfo(getBaseContext());
                 VolleyRequest volleyRequest = new VolleyRequest();
                 //volleyRequest.getPlaces(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap,currentLocation.getLatitude(),currentLocation.getLongitude(),info.loadRadius(),"meal_takeaway", info.loadKeyword());
-                volleyRequest.getPlacesLocalTest(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap,currentLocation.getLatitude(),currentLocation.getLongitude(),3000,"meal_takeaway", "");
+                volleyRequest.getPlacesLocalTest(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap);
 
 
             }

@@ -9,11 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.google.android.gms.location.places.Place;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,6 +79,18 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
             street = itemView.findViewById(R.id.list_straat);
             rating = itemView.findViewById(R.id.list_Rating);
             information = itemView.findViewById(R.id.information_button);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mListener != null) {
+                        int i = getAdapterPosition();
+                        if(i != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(i);
+                        }
+                    }
+
+                }
+            });
         }
     }
 }
