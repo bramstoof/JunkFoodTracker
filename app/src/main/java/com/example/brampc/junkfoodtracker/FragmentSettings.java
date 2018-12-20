@@ -17,6 +17,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class FragmentSettings extends AppCompatDialogFragment {
 
     Context context;
@@ -25,6 +28,8 @@ public class FragmentSettings extends AppCompatDialogFragment {
     RadioButton fr;
     TextView naam;
     Button signOut;
+
+    private static final int RC_SIGN_IN = 123;
 
 
     @Override
@@ -44,6 +49,7 @@ public class FragmentSettings extends AppCompatDialogFragment {
             @Override
             public void onClick(View view) {
                 signOut();
+                createSignInIntent();
             }
         });
         naam.setText(info.loadNaam());
@@ -90,5 +96,23 @@ public class FragmentSettings extends AppCompatDialogFragment {
 
                     }
                 });
+
+
+    }
+
+    private void createSignInIntent() {
+
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build()
+        );
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setAlwaysShowSignInMethodScreen(false)
+                        .setLogo(R.drawable.logo_jft)
+                        .build(), RC_SIGN_IN);
     }
 }
