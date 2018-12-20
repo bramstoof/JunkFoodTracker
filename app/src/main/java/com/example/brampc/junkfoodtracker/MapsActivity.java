@@ -85,7 +85,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         filter = findViewById(R.id.main_filter);
         settings = findViewById(R.id.main_settings);
         dataBase = new DataBase();
-        other_user = findViewById(R.id.other_user);
         createSignInIntent();
         filter.setOnClickListener(new View.OnClickListener() {
             @Override

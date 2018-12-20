@@ -17,6 +17,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class FragmentSettings extends AppCompatDialogFragment {
 
     Context context;
@@ -25,6 +28,8 @@ public class FragmentSettings extends AppCompatDialogFragment {
     RadioButton fr;
     TextView naam;
     Button signOut;
+
+    private static final int RC_SIGN_IN = 123;
 
 
     @Override
@@ -44,15 +49,16 @@ public class FragmentSettings extends AppCompatDialogFragment {
             @Override
             public void onClick(View view) {
                 signOut();
+                createSignInIntent();
             }
         });
         naam.setText(info.loadNaam());
-        String naam = info.loadLanguage();
-        if(naam.equals("nl"))
+        String lang = info.loadLanguage();
+        if(lang.equals("nl"))
             nl.setChecked(true);
-        else if (naam.equals("en"))
+        else if (lang.equals("en"))
             en.setChecked(true);
-        else if(naam.equals("fr"))
+        else if(lang.equals("fr"))
             fr.setChecked(true);
 
         builder.setView(view)
@@ -68,13 +74,13 @@ public class FragmentSettings extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SettingsInfo info = new SettingsInfo(context);
                         if(nl.isChecked())
-                            info.saveNaam("nl");
+                            info.saveLanguage("nl");
                         else
                         if (en.isChecked())
-                            info.saveKeyword("en");
+                            info.saveLanguage("en");
                         else
                         if (fr.isChecked())
-                            info.saveKeyword("fr");
+                            info.saveLanguage("fr");
                     }
                 });
 
@@ -90,5 +96,23 @@ public class FragmentSettings extends AppCompatDialogFragment {
 
                     }
                 });
+
+
+    }
+
+    private void createSignInIntent() {
+
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build()
+        );
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setAlwaysShowSignInMethodScreen(false)
+                        .setLogo(R.drawable.logo_jft)
+                        .build(), RC_SIGN_IN);
     }
 }
