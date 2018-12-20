@@ -47,12 +47,12 @@ public class FragmentSettings extends AppCompatDialogFragment {
             }
         });
         naam.setText(info.loadNaam());
-        String naam = info.loadLanguage();
-        if(naam.equals("nl"))
+        String lang = info.loadLanguage();
+        if(lang.equals("nl"))
             nl.setChecked(true);
-        else if (naam.equals("en"))
+        else if (lang.equals("en"))
             en.setChecked(true);
-        else if(naam.equals("fr"))
+        else if(lang.equals("fr"))
             fr.setChecked(true);
 
         builder.setView(view)
@@ -68,13 +68,13 @@ public class FragmentSettings extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SettingsInfo info = new SettingsInfo(context);
                         if(nl.isChecked())
-                            info.saveNaam("nl");
+                            info.saveLanguage("nl");
                         else
                         if (en.isChecked())
-                            info.saveKeyword("en");
+                            info.saveLanguage("en");
                         else
                         if (fr.isChecked())
-                            info.saveKeyword("fr");
+                            info.saveLanguage("fr");
                     }
                 });
 
