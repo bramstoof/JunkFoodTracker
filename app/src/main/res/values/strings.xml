@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">JunkfoodTracker</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="Search">Search</string>
+    <string name="Restaurants">Restaurants</string>
+    <string name="Language">Language</string>
+    <string name="Dutch">Dutch</string>
+    <string name="English">English</string>
+    <string name="French">French</string>
+    <string name="Account">Account</string>
+    <string name="User">User</string>
+    <string name="Signout">Sign out</string>
+    <string name="Radius">Radius</string>
+    <string name="All">All</string>
 </resources>

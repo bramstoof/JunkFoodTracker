@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JunkfoodTracker</string>
+    <string name="Search">Zoeken</string>
+    <string name="Restaurants">Restaurants</string>
+    <string name="Language">Taal</string>
+    <string name="Dutch">Nederlands</string>
+    <string name="English">Engels</string>
+    <string name="French">Frans</string>
+    <string name="Account">Account</string>
+    <string name="User">Gebruiker</string>
+    <string name="Signout">Uitloggen</string>
+    <string name="Radius">Radius</string>
+    <string name="All">Alles</string>
+</resources>
