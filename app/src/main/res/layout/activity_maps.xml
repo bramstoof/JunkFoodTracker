@@ -22,18 +22,6 @@
             map:layout_constraintStart_toEndOf="@+id/zoek"
             map:layout_constraintTop_toTopOf="@+id/zoek" />
 
-        <TextView
-            android:id="@+id/other_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="Username"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            map:layout_constraintEnd_toEndOf="parent"
-            map:layout_constraintTop_toTopOf="@+id/zoek" />
-
         <Button
             android:id="@+id/zoek"
             android:layout_width="wrap_content"
