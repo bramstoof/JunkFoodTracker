@@ -25,7 +25,8 @@ public class restaurant_informatioon extends AppCompatActivity {
 
             restaurantName.setText(hue.getName());
             restaurantAdres.setText(hue.getStreet());
-            restaurantRating.setText(Integer.toString((int) hue.getRating()));
+            float rating = hue.getRating();
+            restaurantRating.setText(Float.toString(rating));
         }
 
     }
