@@ -1,6 +1,7 @@
 package com.example.brampc.junkfoodtracker;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,10 +10,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -69,12 +72,9 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                             double lng = loc.getDouble("lng");
                             LatLng location = new LatLng(lat,lng);
                             Places place = new Places(name,placeID,icon,street,location,rating);
-                            MarkerOptions options = new MarkerOptions().position(location).title(name);
-                            mMap.addMarker(options);
+                            imageRequest(place, queue);
                             places.add(place);
-                            Log.d(TAG, "1");
                         }
-                        Log.d(TAG, "2");
                         PlacesAdapter adapter = new PlacesAdapter(places,context);
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -83,7 +83,6 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
 
 
                 } catch (JSONException e) {
-                    Log.d(TAG, "3");
                     e.printStackTrace();
                 }
 
@@ -1127,7 +1126,7 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                 "   ],\n" +
                 "   \"status\" : \"OK\"\n" +
                 "}";
-
+        final RequestQueue queue = Volley.newRequestQueue(context);
         try {
             int id = 0;
             JSONArray list = new JSONObject(JSON).getJSONArray("results");
@@ -1148,12 +1147,9 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                     double lng = loc.getDouble("lng");
                     LatLng location = new LatLng(lat,lng);
                     Places place = new Places(name,placeID,icon,street,location,rating);
-                    MarkerOptions options = new MarkerOptions().position(location).title(name);
-                    mMap.addMarker(options);
+                    imageRequest(place, queue);
                     places.add(place);
-                    Log.d(TAG, "1");
                 }
-                Log.d(TAG, "2");
                 PlacesAdapter adapter = new PlacesAdapter(places,context);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -1162,34 +1158,26 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
 
 
         } catch (JSONException e) {
-            Log.d(TAG, "3");
             e.printStackTrace();
         }
-
-//
-//        this.mMap = mMap;
-//        Places p = new Places("Jumbo","","","straat 1",new LatLng(51.991387,5.094252),4);
-//        places.add(p);
-//        MarkerOptions options = new MarkerOptions().position(p.getLocation()).title(p.getName());
-//        mMap.addMarker(options);
-//
-//        p = new Places("Aldi","","","straat 2",new LatLng(51.994254,5.102853),2);
-//        places.add(p);
-//        options = new MarkerOptions().position(p.getLocation()).title(p.getName());
-//        mMap.addMarker(options);
-//
-//        p = new Places("kleine Brug","","","straat 3",new LatLng(51.995324,5.096314),3);
-//        places.add(p);
-//        options = new MarkerOptions().position(p.getLocation()).title(p.getName());
-//        mMap.addMarker(options);
-//
-//
-//        PlacesAdapter adapter = new PlacesAdapter(places,context);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//        adapter.setOnItemClickListener(this);
     }
 
+
+    private void imageRequest(final Places place, RequestQueue queue){
+        final ImageRequest request = new ImageRequest(place.getIcon(), new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                MarkerOptions options = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(response)).position(place.getLocation()).title(place.getName());
+                mMap.addMarker(options);
+            }
+        }, 0, 0, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG,error.toString());
+            }
+        });
+        queue.add(request);
+    }
 
     @Override
     public void onItemClick(int position) {
