@@ -1,11 +1,8 @@
 package com.example.brampc.junkfoodtracker;
 
-import android.net.Uri;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Places implements Serializable  {
     private String name;
@@ -54,4 +51,35 @@ public class Places implements Serializable  {
         Rating = rating;
     }
 
+    public String getPlaceID() {
+        return placeID;
+    }
+
+    public void setPlaceID(String placeID) {
+        this.placeID = placeID;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongditude() {
+        return longditude;
+    }
+
+    public void setLongditude(double longditude) {
+        this.longditude = longditude;
+    }
 }
