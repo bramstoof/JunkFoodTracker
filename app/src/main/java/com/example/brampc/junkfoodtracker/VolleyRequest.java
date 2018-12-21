@@ -1182,6 +1182,6 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
     @Override
     public void onItemClick(int position) {
         Places place = places.get(position);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLocation(), 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLocation(), 18));
     }
 }
