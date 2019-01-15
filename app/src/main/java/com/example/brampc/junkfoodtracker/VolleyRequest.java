@@ -72,7 +72,7 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                             double lng = loc.getDouble("lng");
                             LatLng location = new LatLng(lat,lng);
                             Places place = new Places(name,placeID,icon,street,location,rating);
-                            imageRequest(place, queue);
+                            imageRequest(place,queue);
                             places.add(place);
                         }
                         PlacesAdapter adapter = new PlacesAdapter(places,context);
@@ -99,7 +99,68 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
     public void getPlacesLocalTest(final Context context, final RecyclerView recyclerView, final GoogleMap mMap)
     {
         this.mMap = mMap;
-        String JSON= "{\n" +
+        final RequestQueue queue = Volley.newRequestQueue(context);
+        String JSON = getLocaleBreda();
+        try {
+            int id = 0;
+            JSONArray list = new JSONObject(JSON).getJSONArray("results");
+            while(id != 20){
+                JSONObject object = list.getJSONObject(id++);
+                if(object != null){
+                    String name = object.getString("name");
+                    String placeID = object.getString("id");
+                    String icon = object.getString("icon");
+                    String street = object.getString("vicinity");
+                    float rating = 0;
+                    if (object.has("rating"))
+                    {
+                        rating = (float) object.getDouble("rating");
+                    }
+                    JSONObject loc = object.getJSONObject("geometry").getJSONObject("location");
+                    Double lat = loc.getDouble("lat");
+                    double lng = loc.getDouble("lng");
+                    LatLng location = new LatLng(lat,lng);
+                    Places place = new Places(name,placeID,icon,street,location,rating);
+                    imageRequest(place,queue);
+                    places.add(place);
+                }
+                PlacesAdapter adapter = new PlacesAdapter(places,context);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                adapter.setOnItemClickListener(VolleyRequest.this);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void imageRequest(final Places place, RequestQueue queue){
+        final ImageRequest request = new ImageRequest(place.getIcon(), new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                MarkerOptions options = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(response)).position(place.getLocation()).title(place.getName());
+                mMap.addMarker(options);
+            }
+        }, 0, 0, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG,error.toString());
+            }
+        });
+        queue.add(request);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Places place = places.get(position);
+        this.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLocation(), 18));
+    }
+
+    private String getLocaleBreda(){
+        return "{\n" +
                 "   \"html_attributions\" : [],\n" +
                 "   \"next_page_token\" : \"CuQEXQIAADWKG0c4ZjzS84UgKusjbT7h4l4AELa8TRa_B-x3_2y4jGhjJijdfmJRPZVFI_wl6cNG64TvSSwsxfosNKa87Vbm__y6uYzdv1D6VwCVmCynYCcXM9rzdMaQPCdm_p8mEDC5IoGgd3V-HajnqlJN5ovyqbxx1yee-kVixtwx32-GrEWaNyvs1USGlnVIwxP71GUr78eif5tBOEsi2HwA3s20gdEPB_IJRQwAKZd_G0iYSpIt0w44Mk9ZUVVLkCWUbrXaZq1v3ix-iaPJmXvF526gCO6YaJPITSJnCBd0PpsYakv1Hq5uvZ-hz5P2RgSu0Xhq1FFL8O0RzzU1lvZqeeWLrT_93JZK2SeLsC5TkDRAYc4BZwjO8w_FkJ5J9t8VzMt-P0qcTCP-rr3gec9pdSLsBy0iIjgHNcnS1HmSrXEXQW2xuq1rqoUwYshRKPUnbzDZwSYtYTIgpp-Aa23NCdedxB9GxbtqWz5kmEIBMF-SkboqLKxnGz-Z8aK7qKv2VEG0mz3A-fngeHc6YpQAwLIO2aRPKQZ5jmoDo481JUJcEs1hnreuLmOE7rap_Ya3qLZIbiMSzmIGNJEeR6Wn3qeipsy0fSafcj3AgFSJySyOU2BRCRDUuWzMbOjbq3yMtx6ZzcI9VxhKLR6ySRZhzJJt82-Equ3P-hptL_1pCY810ym1xZ2yOaV-bFrRk69z4Xgm_cE-dc_CLjXKkUJLuZG0ifGmLbrBzfFvNJu78d9ml_L8HFMFr-EXFJXdOKux-66KVzTPNg9IWN9ua4Tjk60rNzxyQpUXJrjDMc6RF5BgEhC6N8d3eazOzj1KbCANM9BEGhQLEET4wXOvxOdd1F_kkWBIr3S-JQ\",\n" +
                 "   \"results\" : [\n" +
@@ -1126,62 +1187,6 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                 "   ],\n" +
                 "   \"status\" : \"OK\"\n" +
                 "}";
-        final RequestQueue queue = Volley.newRequestQueue(context);
-        try {
-            int id = 0;
-            JSONArray list = new JSONObject(JSON).getJSONArray("results");
-            while(id != 20){
-                JSONObject object = list.getJSONObject(id++);
-                if(object != null){
-                    String name = object.getString("name");
-                    String placeID = object.getString("id");
-                    String icon = object.getString("icon");
-                    String street = object.getString("vicinity");
-                    float rating = 0;
-                    if (object.has("rating"))
-                    {
-                        rating = (float) object.getDouble("rating");
-                    }
-                    JSONObject loc = object.getJSONObject("geometry").getJSONObject("location");
-                    Double lat = loc.getDouble("lat");
-                    double lng = loc.getDouble("lng");
-                    LatLng location = new LatLng(lat,lng);
-                    Places place = new Places(name,placeID,icon,street,location,rating);
-                    imageRequest(place, queue);
-                    places.add(place);
-                }
-                PlacesAdapter adapter = new PlacesAdapter(places,context);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                adapter.setOnItemClickListener(VolleyRequest.this);
-            }
 
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void imageRequest(final Places place, RequestQueue queue){
-        final ImageRequest request = new ImageRequest(place.getIcon(), new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                MarkerOptions options = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(response)).position(place.getLocation()).title(place.getName());
-                mMap.addMarker(options);
-            }
-        }, 0, 0, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG,error.toString());
-            }
-        });
-        queue.add(request);
-    }
-
-    @Override
-    public void onItemClick(int position) {
-        Places place = places.get(position);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLocation(), 18));
     }
 }

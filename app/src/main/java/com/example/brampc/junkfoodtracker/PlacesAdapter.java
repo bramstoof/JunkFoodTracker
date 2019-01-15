@@ -93,5 +93,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
             });
         }
     }
+    
 }
 
