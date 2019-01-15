@@ -63,7 +63,7 @@ public class review_fragment extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         DataBase dataBase = new DataBase();
                         java.util.Date date = new java.util.Date();
-                        Review review = new Review(bar.getProgress(),"user",description.getText().toString(),placeId, date.toString());
+                        Review review = new Review(bar.getProgress(),info.loadNaam(),description.getText().toString(),placeId, date.toString());
                         dataBase.addData(review);
                     }
                 });

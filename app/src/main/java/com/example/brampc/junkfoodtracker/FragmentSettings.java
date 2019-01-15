@@ -98,7 +98,6 @@ public class FragmentSettings extends AppCompatDialogFragment {
                             info.saveDataLocation("online");
 
 
-
                     }
                 });
 
