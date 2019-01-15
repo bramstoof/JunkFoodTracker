@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".review_fragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageview_star2"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/aantal_sterren_Textview"
+            app:layout_constraintStart_toEndOf="@+id/aantal_sterren_Textview"
+            app:layout_constraintTop_toTopOf="@+id/aantal_sterren_Textview"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        <TextView
+            android:id="@+id/review_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Review:"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aantal_sterren_Textview" />
+
+        <TextView
+            android:id="@+id/aantal_sterren_Textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Aantal Sterren"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_fragment_title" />
+
+        <Button
+            android:id="@+id/review_cancel_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Cancel"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_reviewText_Textview"
+            app:layout_constraintVertical_bias="0.02" />
+
+        <Button
+            android:id="@+id/review_ok_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="OK"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/review_cancel_Button"
+            app:layout_constraintTop_toBottomOf="@+id/review_reviewText_Textview" />
+
+        <EditText
+            android:id="@+id/review_reviewText_Textview"
+            android:layout_width="354dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:selectAllOnFocus="false"
+            android:singleLine="false"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_TextView" />
+
+        <EditText
+            android:id="@+id/review_amountOfStarsGiven_Textfield"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_star2"
+            app:layout_constraintStart_toEndOf="@+id/imageview_star2"
+            app:layout_constraintTop_toTopOf="@+id/imageview_star2"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/maximum_stars"
+            android:layout_width="37dp"
+            android:layout_height="31dp"
+            android:text="/5"
+            android:textAlignment="viewStart"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/review_amountOfStarsGiven_Textfield"
+            app:layout_constraintStart_toEndOf="@+id/review_amountOfStarsGiven_Textfield"
+            app:layout_constraintTop_toTopOf="@+id/review_amountOfStarsGiven_Textfield" />
+
+        <TextView
+            android:id="@+id/review_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Schrijf een review:"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>
