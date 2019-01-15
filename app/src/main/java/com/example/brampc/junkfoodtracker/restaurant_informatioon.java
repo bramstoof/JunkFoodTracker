@@ -1,8 +1,7 @@
 package com.example.brampc.junkfoodtracker;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 public class restaurant_informatioon extends AppCompatActivity  {
 
     private Button writeReview;
+    private Places hue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +19,10 @@ public class restaurant_informatioon extends AppCompatActivity  {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_informatioon);
-        Bundle extras = getIntent().getExtras();
+        final Bundle extras = getIntent().getExtras();
         writeReview = findViewById(R.id.Restaurant_writeReview);
         if(extras != null) {
-            final Places hue = (Places) extras.getSerializable("hue");
+            hue = (Places) extras.getSerializable("hue");
             restaurantName = findViewById(R.id.restaurant_name);
             restaurantAdres = findViewById(R.id.restaurant_adres);
             restaurantRating = findViewById(R.id.restaurant_rating);
@@ -36,7 +36,7 @@ public class restaurant_informatioon extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 review_fragment review_fragment = new review_fragment();
-                review_fragment.show(getSupportFragmentManager(),"Schrijf een review:");
+                review_fragment.show(getSupportFragmentManager(),"Schrijf een review:", hue.getPlaceID());
             }
         });
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class FragmentSettings extends AppCompatDialogFragment {
 
-    Context context;
+    private Context context;
     RadioButton nl;
     RadioButton en;
     RadioButton fr;
@@ -73,7 +73,7 @@ public class FragmentSettings extends AppCompatDialogFragment {
 
 
         builder.setView(view)
-                .setTitle("Filter")
+                .setTitle("Settings")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -86,8 +86,7 @@ public class FragmentSettings extends AppCompatDialogFragment {
                         SettingsInfo info = new SettingsInfo(context);
                         if(nl.isChecked())
                             info.saveLanguage("nl");
-                        else
-                        if (en.isChecked())
+                        else if (en.isChecked())
                             info.saveLanguage("en");
                         else if (fr.isChecked())
                             info.saveLanguage("fr");
@@ -97,6 +96,8 @@ public class FragmentSettings extends AppCompatDialogFragment {
                             info.saveDataLocation("local");
                         else if (online.isChecked())
                             info.saveDataLocation("online");
+
+
 
                     }
                 });

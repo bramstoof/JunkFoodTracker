@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -87,8 +89,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         filter = findViewById(R.id.main_filter);
         settings = findViewById(R.id.main_settings);
         info = new SettingsInfo(getBaseContext());
-        Locale.setDefault(new Locale("en"));
-        dataBase = new DataBase();
+        Locale.setDefault(new Locale(info.loadLanguage()));
+        Resources res = getBaseContext().getResources();
+// Change locale settings in the app.
+        DisplayMetrics dm = res.getDisplayMetrics();
+        android.content.res.Configuration conf = res.getConfiguration();
+        conf.setLocale(new Locale(info.loadLanguage().toLowerCase())); // API 17+ only.
         createSignInIntent();
         getLocationPromission();
         filter.setOnClickListener(new View.OnClickListener() {
@@ -108,8 +114,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         zoeken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
-                //dataBase.readData();
 
                 VolleyRequest volleyRequest = new VolleyRequest();
                 String dataLocation = info.loadDataLocation();
