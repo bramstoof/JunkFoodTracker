@@ -9,7 +9,7 @@ import android.widget.TextView;
 public class restaurant_informatioon extends AppCompatActivity  {
 
     private Button writeReview;
-    private Places hue;
+    private Places place;
     private Button refesh;
 
 
@@ -32,21 +32,21 @@ public class restaurant_informatioon extends AppCompatActivity  {
             }
         });
         if(extras != null) {
-            hue = (Places) extras.getSerializable("hue");
+            place = (Places) extras.getSerializable("place");
             restaurantName = findViewById(R.id.restaurant_name);
             restaurantAdres = findViewById(R.id.restaurant_adres);
             restaurantRating = findViewById(R.id.restaurant_rating);
 
-            restaurantName.setText(hue.getName());
-            restaurantAdres.setText(hue.getStreet());
-            float rating = hue.getRating();
+            restaurantName.setText(place.getName());
+            restaurantAdres.setText(place.getStreet());
+            float rating = place.getRating();
             restaurantRating.setText(Float.toString(rating));
         }
         writeReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 review_fragment review_fragment = new review_fragment();
-                review_fragment.show(getSupportFragmentManager(),"Schrijf een review:", hue.getPlaceID());
+                review_fragment.show(getSupportFragmentManager(),"Schrijf een review:", place.getPlaceID());
             }
         });
 

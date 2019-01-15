@@ -17,14 +17,14 @@ import java.util.ArrayList;
 
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder>{
 
-    private static final String TAG = "HueAdapter";
+    private static final String TAG = "JFT";
 
-    private ArrayList<Places> allHueLamps;
+    private ArrayList<Places> allPlaces;
     private Context context;
     private onItemClickListener mListener;
 
-    public PlacesAdapter(ArrayList<Places> allHueLamps, Context context) {
-        this.allHueLamps = allHueLamps;
+    public PlacesAdapter(ArrayList<Places> allPlaces, Context context) {
+        this.allPlaces = allPlaces;
         this.context = context;
     }
 
@@ -46,15 +46,15 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
     @Override
     public void onBindViewHolder(Viewholder viewholder, final int i){
         Log.d(TAG, "onBlindViewHolder: called.");
-        final Places hueLamp = allHueLamps.get(i);
-        viewholder.name.setText(hueLamp.getName());
-        viewholder.street.setText(hueLamp.getStreet());
-        viewholder.rating.setText(hueLamp.getRating()+ "");
+        final Places place = allPlaces.get(i);
+        viewholder.name.setText(place.getName());
+        viewholder.street.setText(place.getStreet());
+        viewholder.rating.setText(place.getRating()+ "");
         viewholder.information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, restaurant_informatioon.class);
-                intent.putExtra("hue", (Serializable) allHueLamps.get(i));
+                intent.putExtra("place", (Serializable) allPlaces.get(i));
                 context.startActivity(intent);
             }
         });
@@ -62,7 +62,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
 
     @Override
     public int getItemCount() {
-        return allHueLamps.size();
+        return allPlaces.size();
     }
 
     public class Viewholder extends RecyclerView.ViewHolder {
