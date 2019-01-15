@@ -10,6 +10,8 @@ public class restaurant_informatioon extends AppCompatActivity  {
 
     private Button writeReview;
     private Places hue;
+    private Button refesh;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,14 @@ public class restaurant_informatioon extends AppCompatActivity  {
         setContentView(R.layout.activity_restaurant_informatioon);
         final Bundle extras = getIntent().getExtras();
         writeReview = findViewById(R.id.Restaurant_writeReview);
+        refesh = findViewById(R.id.refresh);
+        refesh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DataBase dataBase = new DataBase();
+                dataBase.readData();
+            }
+        });
         if(extras != null) {
             hue = (Places) extras.getSerializable("hue");
             restaurantName = findViewById(R.id.restaurant_name);

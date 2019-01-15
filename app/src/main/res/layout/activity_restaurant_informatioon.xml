@@ -68,10 +68,11 @@
         android:id="@+id/review_scrollview"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurant_image"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refresh" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"
@@ -97,5 +98,15 @@
         android:text="@string/WriteAReview"
         app:layout_constraintStart_toStartOf="@+id/restaurant_info"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_info" />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/ic_popup_sync"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Restaurant_writeReview" />
 
 </android.support.constraint.ConstraintLayout>

@@ -91,10 +91,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         info = new SettingsInfo(getBaseContext());
         Locale.setDefault(new Locale(info.loadLanguage()));
         Resources res = getBaseContext().getResources();
-// Change locale settings in the app.
         DisplayMetrics dm = res.getDisplayMetrics();
         android.content.res.Configuration conf = res.getConfiguration();
         conf.setLocale(new Locale(info.loadLanguage().toLowerCase())); // API 17+ only.
+        res.updateConfiguration(conf, dm);
         createSignInIntent();
         getLocationPromission();
         filter.setOnClickListener(new View.OnClickListener() {

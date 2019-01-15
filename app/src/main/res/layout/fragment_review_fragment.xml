@@ -67,7 +67,7 @@
             android:layout_width="37dp"
             android:layout_height="31dp"
             android:layout_marginStart="8dp"
-            android:text="5"
+            android:text="0"
             android:textAlignment="viewStart"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageview_star2"

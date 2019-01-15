@@ -8,6 +8,16 @@
     tools:context=".restaurant_informatioon">
 
     <Button
+        android:id="@+id/refresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:drawable/ic_popup_sync"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurant_writeReview"
+        app:layout_constraintStart_toEndOf="@+id/restaurant_writeReview"
+        app:layout_constraintTop_toTopOf="@+id/restaurant_writeReview" />
+
+    <Button
         android:id="@+id/restaurant_writeReview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,7 +101,7 @@
     <ListView
         android:id="@+id/review_scrollview"
         android:layout_width="wrap_content"
-        android:layout_height="158dp"
+        android:layout_height="159dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

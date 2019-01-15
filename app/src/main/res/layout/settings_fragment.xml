@@ -56,11 +56,14 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/Account"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:layout_editor_absoluteX="169dp"
-            tools:layout_editor_absoluteY="2dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/set_SignOut"
@@ -85,9 +88,10 @@
             android:id="@+id/set_naam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:text="naam"
-            tools:layout_editor_absoluteX="211dp"
-            tools:layout_editor_absoluteY="43dp" />
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="@+id/textView5" />
 
         <TextView
             android:id="@+id/textView7"
