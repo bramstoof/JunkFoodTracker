@@ -23,13 +23,11 @@
 
     <ImageView
         android:id="@+id/restaurant_image"
-        android:layout_width="241dp"
-        android:layout_height="202dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_adres"
         app:srcCompat="@drawable/logo_jft" />
 
@@ -81,5 +79,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.63" />
+
+    <TextView
+        android:id="@+id/restaurant_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Extra Info"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_adres"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_adres" />
+
+    <Button
+        android:id="@+id/Restaurant_writeReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="Schrijf een review"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_info"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_info" />
 
 </android.support.constraint.ConstraintLayout>
