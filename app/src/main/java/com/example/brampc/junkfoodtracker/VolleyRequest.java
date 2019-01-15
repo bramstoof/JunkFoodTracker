@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class VolleyRequest implements PlacesAdapter.onItemClickListener{
 
     private final String TAG = "VOLLEY";
+    //AIzaSyA2uDGgfyhp_dSzLg4d2vf8jfjBODps0Gg
     private static final String SPECIAL_KEY = "AIzaSyA2uDGgfyhp_dSzLg4d2vf8jfjBODps0Gg";
     private String result;
     private RecyclerView recyclerView;

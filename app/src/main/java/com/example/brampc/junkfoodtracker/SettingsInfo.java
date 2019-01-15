@@ -11,6 +11,7 @@ public class SettingsInfo {
     private final String RADIUS = "radius";
     private final String LANGUAGE = "language";
     private final String NAAM = "naam";
+    private final String DATA_LOCATION = "dataLocatie";
 
     public SettingsInfo(Context context) {
         this.context = context;
@@ -44,6 +45,13 @@ public class SettingsInfo {
         editor.apply();
     }
 
+    public void saveDataLocation(String data){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(DATA_LOCATION, data);
+        editor.apply();
+    }
+
     public String loadKeyword(){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEYWORD,"");
@@ -62,6 +70,11 @@ public class SettingsInfo {
     public String loadLanguage(){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPreferences.getString(LANGUAGE,"en");
+    }
+
+    public String loadDataLocation(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(DATA_LOCATION,"local");
     }
 
 }

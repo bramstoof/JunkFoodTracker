@@ -26,6 +26,8 @@ public class FragmentSettings extends AppCompatDialogFragment {
     RadioButton nl;
     RadioButton en;
     RadioButton fr;
+    RadioButton local;
+    RadioButton online;
     TextView naam;
     Button signOut;
 
@@ -43,6 +45,8 @@ public class FragmentSettings extends AppCompatDialogFragment {
         nl = view.findViewById(R.id.set_nl);
         en = view.findViewById(R.id.set_en);
         fr = view.findViewById(R.id.set_fr);
+        local = view.findViewById(R.id.Set_Local);
+        online = view.findViewById(R.id.Set_Online);
         naam = view.findViewById(R.id.set_naam);
         signOut = view.findViewById(R.id.set_SignOut);
         signOut.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +65,13 @@ public class FragmentSettings extends AppCompatDialogFragment {
         else if(lang.equals("fr"))
             fr.setChecked(true);
 
+        String data = info.loadDataLocation();
+        if(data.equals("local"))
+            local.setChecked(true);
+        else if (data.equals("online"))
+            online.setChecked(true);
+
+
         builder.setView(view)
                 .setTitle("Filter")
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -69,7 +80,7 @@ public class FragmentSettings extends AppCompatDialogFragment {
 
                     }
                 })
-                .setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SettingsInfo info = new SettingsInfo(context);
@@ -78,9 +89,15 @@ public class FragmentSettings extends AppCompatDialogFragment {
                         else
                         if (en.isChecked())
                             info.saveLanguage("en");
-                        else
-                        if (fr.isChecked())
+                        else if (fr.isChecked())
                             info.saveLanguage("fr");
+
+
+                        if(local.isChecked())
+                            info.saveDataLocation("local");
+                        else if (online.isChecked())
+                            info.saveDataLocation("online");
+
                     }
                 });
 

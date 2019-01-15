@@ -50,6 +50,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static android.support.v4.app.NotificationCompat.DEFAULT_VIBRATE;
 
@@ -76,6 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button zoeken;
     private Button filter;
     private Button settings;
+    SettingsInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         zoeken = findViewById(R.id.zoek);
         filter = findViewById(R.id.main_filter);
         settings = findViewById(R.id.main_settings);
+        info = new SettingsInfo(getBaseContext());
+        Locale.setDefault(new Locale("en"));
         dataBase = new DataBase();
         createSignInIntent();
         getLocationPromission();
@@ -106,10 +110,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 //Review review = new Review(5,"timoDannis","ja ja ja ja ja","456789oijb","25/06/2018");
                 //dataBase.readData();
-                SettingsInfo info = new SettingsInfo(getBaseContext());
+
                 VolleyRequest volleyRequest = new VolleyRequest();
-                //volleyRequest.getPlaces(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap,currentLocation.getLatitude(),currentLocation.getLongitude(),info.loadRadius(),"meal_takeaway", info.loadKeyword());
-                volleyRequest.getPlacesLocalTest(getBaseContext(),(RecyclerView) findViewById(R.id.main_list),mMap);
+                String dataLocation = info.loadDataLocation();
+                if(dataLocation == "online") {
+                    volleyRequest.getPlaces(getBaseContext(), (RecyclerView) findViewById(R.id.main_list), mMap, currentLocation.getLatitude(), currentLocation.getLongitude(), info.loadRadius(), "meal_takeaway", info.loadKeyword());
+                }
+                else{
+                    volleyRequest.getPlacesLocalTest(getBaseContext(), (RecyclerView) findViewById(R.id.main_list), mMap);
+                }
 
 
             }
