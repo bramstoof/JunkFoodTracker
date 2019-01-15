@@ -78,13 +78,9 @@
         android:id="@+id/zoek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="@string/Search"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintStart_toStartOf="@+id/guideline"
-        map:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="400dp"
+        tools:layout_editor_absoluteY="8dp" />
 
 </android.support.constraint.ConstraintLayout>
 

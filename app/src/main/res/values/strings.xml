@@ -15,5 +15,12 @@
     <string name="Information">Information</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="AmountOfStars">Amount of stars</string>
+    <string name="review">Review</string>
+    <string name="Online">Online</string>
+    <string name="Local">Local</string>
+    <string name="Datasource">Data source</string>
+    <string name="WriteAReview">Write a review</string>
+    <string name="Restaurant">Restaurants</string>
 </resources>

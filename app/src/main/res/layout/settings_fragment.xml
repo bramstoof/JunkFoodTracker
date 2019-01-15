@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="2dp"
             android:text="@string/Language"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -56,14 +56,11 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_marginEnd="8dp"
             android:text="@string/Account"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/radioGroup2"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            tools:layout_editor_absoluteX="169dp"
+            tools:layout_editor_absoluteY="2dp" />
 
         <Button
             android:id="@+id/set_SignOut"
@@ -88,19 +85,16 @@
             android:id="@+id/set_naam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:text="naam"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
-            app:layout_constraintTop_toTopOf="@+id/textView5" />
+            tools:layout_editor_absoluteX="211dp"
+            tools:layout_editor_absoluteY="43dp" />
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="DataSource"
+            android:text="@string/Datasource"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/textView2"
@@ -120,14 +114,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Online" />
+                android:text="@string/Online" />
 
             <RadioButton
                 android:id="@+id/Set_Local"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Local" />
+                android:text="@string/Local" />
 
         </RadioGroup>
 

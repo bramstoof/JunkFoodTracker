@@ -13,4 +13,11 @@
     <string name="Radius">Rayon</string>
     <string name="All">Tout</string>
     <string name="Information">Les informations</string>
+    <string name="AmountOfStars">Nombre d\'étoiles</string>
+    <string name="review">Revue</string>
+    <string name="Online">En ligne</string>
+    <string name="Local">Local</string>
+    <string name="Datasource">Databron</string>
+    <string name="WriteAReview">" Écrire une critique"</string>
+    <string name="Restaurant">Restaurants</string>
 </resources>

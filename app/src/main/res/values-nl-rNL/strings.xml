@@ -13,4 +13,11 @@
     <string name="Radius">Radius</string>
     <string name="All">Alles</string>
     <string name="Information">Informatie</string>
+    <string name="AmountOfStars">Aantal sterren</string>
+    <string name="review">Review</string>
+    <string name="Online">Online</string>
+    <string name="Local">Lokaal</string>
+    <string name="Datasource">Databron</string>
+    <string name="WriteAReview">Schrijf een review</string>
+    <string name="Restaurant">Restaurants</string>
 </resources>
