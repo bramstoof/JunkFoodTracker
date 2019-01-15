@@ -86,6 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         settings = findViewById(R.id.main_settings);
         dataBase = new DataBase();
         createSignInIntent();
+        getLocationPromission();
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         });
-        getLocationPromission();
+
 
 
     }
