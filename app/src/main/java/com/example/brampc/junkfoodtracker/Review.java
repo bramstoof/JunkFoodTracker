@@ -1,8 +1,7 @@
 package com.example.brampc.junkfoodtracker;
 
-import java.util.Date;
-
 public class Review {
+    private String  id;
     private int rating;
     private String user;
     private String description;
@@ -15,6 +14,14 @@ public class Review {
         this.description = description;
         this.placeId = placeId;
         this.date = date;
+    }
+
+    public void setID(String id){
+        this.id = id;
+    }
+
+    public String getID(){
+        return id;
     }
 
     public int getRating() {

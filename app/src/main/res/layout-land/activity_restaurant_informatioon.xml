@@ -7,12 +7,27 @@
     android:background="@color/backGround"
     tools:context=".restaurant_informatioon">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/review_scrollview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refresh" />
+
     <Button
         android:id="@+id/refresh"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:background="@android:drawable/ic_popup_sync"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="@+id/restaurant_writeReview"
         app:layout_constraintStart_toEndOf="@+id/restaurant_writeReview"
         app:layout_constraintTop_toTopOf="@+id/restaurant_writeReview" />
@@ -26,6 +41,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/WriteAReview"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="@+id/imageview_star"
         app:layout_constraintEnd_toStartOf="@+id/restaurant_image"
         app:layout_constraintHorizontal_bias="0.0"
@@ -42,6 +58,7 @@
         android:text="Mc Donalds"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@color/text"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,8 +70,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/review_scrollview"
+        android:textColor="@color/text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
@@ -69,6 +85,7 @@
         android:layout_marginEnd="8dp"
         android:text="Hogeschoollaan 31 Breda"
         android:textSize="18sp"
+        android:textColor="@color/text"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_name" />
@@ -81,6 +98,7 @@
         android:text="3.5"
         android:textSize="40sp"
         android:textStyle="bold"
+        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="@+id/imageview_star"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageview_star" />
@@ -90,20 +108,11 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/review_scrollview"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/restaurant_rating"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_adres"
-        app:layout_constraintVertical_bias="0.588"
         app:srcCompat="@android:drawable/btn_star_big_on" />
-
-    <ListView
-        android:id="@+id/review_scrollview"
-        android:layout_width="wrap_content"
-        android:layout_height="159dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"

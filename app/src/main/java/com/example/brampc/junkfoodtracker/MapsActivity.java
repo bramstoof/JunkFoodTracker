@@ -81,6 +81,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button settings;
     SettingsInfo info;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +113,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 fragmentSettings.show(getSupportFragmentManager(),"settings");
             }
         });
+
+
         zoeken.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +132,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         });
+
+
+
+
 
 
 
