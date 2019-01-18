@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,6 +59,25 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
                 context.startActivity(intent);
             }
         });
+        int priceRating = place.getPriceRating();
+        if(priceRating == 1) {
+            viewholder.priceLevel1.setVisibility(View.VISIBLE);
+            viewholder.priceLevel2.setVisibility(View.INVISIBLE);
+            viewholder.priceLevel3.setVisibility(View.INVISIBLE);
+        }else if(priceRating == 2){
+            viewholder.priceLevel1.setVisibility(View.VISIBLE);
+            viewholder.priceLevel2.setVisibility(View.VISIBLE);
+            viewholder.priceLevel3.setVisibility(View.INVISIBLE);
+        }else if(priceRating == 3){
+            viewholder.priceLevel1.setVisibility(View.VISIBLE);
+            viewholder.priceLevel2.setVisibility(View.VISIBLE);
+            viewholder.priceLevel3.setVisibility(View.VISIBLE);
+        }else{
+            viewholder.priceLevel1.setVisibility(View.INVISIBLE);
+            viewholder.priceLevel2.setVisibility(View.INVISIBLE);
+            viewholder.priceLevel3.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override
@@ -71,6 +91,9 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
         TextView rating;
         Button information;
         RelativeLayout parentLayout;
+        ImageView priceLevel1;
+        ImageView priceLevel2;
+        ImageView priceLevel3;
 
         public Viewholder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +102,9 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.Viewholder
             street = itemView.findViewById(R.id.list_straat);
             rating = itemView.findViewById(R.id.list_Rating);
             information = itemView.findViewById(R.id.information_button);
+            priceLevel1 = itemView.findViewById(R.id.priceLevel1);
+            priceLevel2 = itemView.findViewById(R.id.priceLevel2);
+            priceLevel3 = itemView.findViewById(R.id.priceLevel3);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

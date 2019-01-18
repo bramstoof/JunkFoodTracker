@@ -7,6 +7,93 @@
     android:background="@color/backGround"
     tools:context=".restaurant_informatioon">
 
+    <TextView
+        android:id="@+id/restaurant_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Mc Donalds"
+        android:textColor="@color/text"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/restaurant_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageview_star"
+        app:srcCompat="@drawable/logo_jft" />
+
+    <TextView
+        android:id="@+id/restaurant_adres"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Hogeschoollaan 31 Breda"
+        android:textColor="@color/text"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_name"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_name" />
+
+    <TextView
+        android:id="@+id/restaurant_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text"
+        android:text="3.5"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageview_star"
+        app:layout_constraintEnd_toStartOf="@+id/imageview_star"
+        app:layout_constraintTop_toTopOf="@+id/imageview_star" />
+
+    <ImageView
+        android:id="@+id/imageview_star"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.63" />
+
+    <Button
+        android:id="@+id/Restaurant_writeReview"
+        android:layout_width="125dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/WriteAReview"
+        app:layout_constraintStart_toStartOf="@+id/restaurant_adres"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_adres" />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:drawable/ic_popup_sync"
+        app:layout_constraintBottom_toBottomOf="@+id/Restaurant_writeReview"
+        app:layout_constraintStart_toEndOf="@+id/Restaurant_writeReview"
+        app:layout_constraintTop_toTopOf="@+id/Restaurant_writeReview" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/review_scrollview"
         android:layout_width="0dp"
@@ -15,109 +102,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refresh" />
-
-    <Button
-        android:id="@+id/refresh"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:background="@android:drawable/ic_popup_sync"
-        android:textColor="@color/text"
-        app:layout_constraintBottom_toBottomOf="@+id/restaurant_writeReview"
-        app:layout_constraintStart_toEndOf="@+id/restaurant_writeReview"
-        app:layout_constraintTop_toTopOf="@+id/restaurant_writeReview" />
-
-    <Button
-        android:id="@+id/restaurant_writeReview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/WriteAReview"
-        android:textColor="@color/text"
-        app:layout_constraintBottom_toBottomOf="@+id/imageview_star"
-        app:layout_constraintEnd_toStartOf="@+id/restaurant_image"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageview_star"
-        app:layout_constraintTop_toBottomOf="@+id/restaurant_adres" />
-
-    <TextView
-        android:id="@+id/restaurant_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Mc Donalds"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="@color/text"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/restaurant_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@color/text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_jft" />
-
-    <TextView
-        android:id="@+id/restaurant_adres"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:text="Hogeschoollaan 31 Breda"
-        android:textSize="18sp"
-        android:textColor="@color/text"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurant_name" />
-
-    <TextView
-        android:id="@+id/restaurant_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="3.5"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:textColor="@color/text"
-        app:layout_constraintBottom_toBottomOf="@+id/imageview_star"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageview_star" />
-
-    <ImageView
-        android:id="@+id/imageview_star"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/restaurant_rating"
-        app:layout_constraintTop_toBottomOf="@+id/restaurant_adres"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5523649" />
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_image" />
 </android.support.constraint.ConstraintLayout>

@@ -10,10 +10,11 @@ public class Places implements Serializable  {
     private String icon;
     private String Street;
     private float Rating;
+    private int priceRating;
     private double latitude;
     private double longditude;
 
-    public Places(String name, String placeID, String icon, String street, LatLng location, float rating) {
+    public Places(String name, String placeID, String icon, String street, LatLng location, float rating, int priceRating) {
         this.name = name;
         this.placeID = placeID;
         this.icon = icon;
@@ -21,6 +22,15 @@ public class Places implements Serializable  {
         latitude = location.latitude;
         longditude = location.longitude;
         Rating = rating;
+        this.priceRating = priceRating;
+    }
+
+    public int getPriceRating() {
+        return priceRating;
+    }
+
+    public void setPriceRating(int priceRating) {
+        this.priceRating = priceRating;
     }
 
     public String getName() {

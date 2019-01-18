@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class review_fragment extends AppCompatDialogFragment {
@@ -65,6 +66,7 @@ public class review_fragment extends AppCompatDialogFragment {
                         java.util.Date date = new java.util.Date();
                         Review review = new Review(bar.getProgress(),info.loadNaam(),description.getText().toString(),placeId, date.toString());
                         dataBase.addData(review);
+                        Toast.makeText(context, "Review is geplaatst", Toast.LENGTH_SHORT).show();
                     }
                 });
         return builder.create();

@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class VolleyRequest implements PlacesAdapter.onItemClickListener{
 
     private final String TAG = "VOLLEY";
-    //AIzaSyA2uDGgfyhp_dSzLg4d2vf8jfjBODps0Gg
     private static final String SPECIAL_KEY = "AIzaSyA2uDGgfyhp_dSzLg4d2vf8jfjBODps0Gg";
     private String result;
     private RecyclerView recyclerView;
@@ -64,6 +63,12 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                             String icon = object.getString("icon");
                             String street = object.getString("vicinity");
                             float rating = 0;
+                            int priceLevel = 0;
+                            if (object.has("price_level"))
+                            {
+                                priceLevel = object.getInt("price_level");
+                            }
+
                             if (object.has("rating"))
                             {
                                 rating = (float) object.getDouble("rating");
@@ -72,7 +77,7 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                             Double lat = loc.getDouble("lat");
                             double lng = loc.getDouble("lng");
                             LatLng location = new LatLng(lat,lng);
-                            Places place = new Places(name,placeID,icon,street,location,rating);
+                            Places place = new Places(name,placeID,icon,street,location,rating,priceLevel);
                             imageRequest(place,queue);
                             places.add(place);
                         }
@@ -113,6 +118,12 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                     String icon = object.getString("icon");
                     String street = object.getString("vicinity");
                     float rating = 0;
+                    int priceLevel = 0;
+                    if (object.has("price_level"))
+                    {
+                        priceLevel = object.getInt("price_level");
+                    }
+
                     if (object.has("rating"))
                     {
                         rating = (float) object.getDouble("rating");
@@ -121,7 +132,7 @@ public class VolleyRequest implements PlacesAdapter.onItemClickListener{
                     Double lat = loc.getDouble("lat");
                     double lng = loc.getDouble("lng");
                     LatLng location = new LatLng(lat,lng);
-                    Places place = new Places(name,placeID,icon,street,location,rating);
+                    Places place = new Places(name,placeID,icon,street,location,rating,priceLevel);
                     imageRequest(place,queue);
                     places.add(place);
                 }

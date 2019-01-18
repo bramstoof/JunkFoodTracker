@@ -55,7 +55,7 @@ public class restaurant_informatioon extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 review_fragment review_fragment = new review_fragment();
-                review_fragment.show(getSupportFragmentManager(),"Schrijf een review:", place.getPlaceID());
+                review_fragment.show(getSupportFragmentManager(),"Schrijf een Review:", place.getPlaceID());
             }
         });
 

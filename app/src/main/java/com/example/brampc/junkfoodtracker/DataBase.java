@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -86,6 +87,9 @@ public class DataBase  {
                         }
                         Log.d(TAG,"done recovering data");
                         ReviewAdapther adapter = new ReviewAdapther(reviews,context);
+                        if(reviews.size() == 0){
+                            Toast.makeText(context, "Geen reviews beschikbaar", Toast.LENGTH_SHORT).show();
+                        }
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     } else {
